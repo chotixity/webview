@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:webview/recents_grid.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:webview/widgets/Recents_list.dart';
+import 'package:webview/widgets/recents_grid.dart';
 
-void main() {
+void main() async {
+  await dotenv.load(fileName: ".env");
   runApp(const MyApp());
 }
 
@@ -38,6 +41,12 @@ class HomeWidget extends StatefulWidget {
 
 class _HomeWidgetState extends State<HomeWidget> {
   final List labels = ["Playlists", "Artists", "Albums", "Podcasts & Shows"];
+  final List<Map<String, dynamic>> items = [
+    {"image": "assets/Album1.jpeg", "title": "Daily Mix 1", "type": "Playlist"},
+    {"image": "assets/Album2.jpeg", "title": "Daily Mix 1", "type": "Playlist"},
+    {"image": "assets/Album3.jpeg", "title": "Daily Mix 1", "type": "Playlist"},
+    {"image": "assets/Album4.jpeg", "title": "Daily Mix 1", "type": "Playlist"}
+  ];
 
   int? _value = 0;
 
@@ -189,6 +198,44 @@ class _HomeWidgetState extends State<HomeWidget> {
                               );
                             },
                           ).toList(),
+                        ),
+                        Expanded(
+                          child: ListView(
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  IconButton(
+                                    onPressed: () {},
+                                    icon: Icon(
+                                      Icons.search,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSecondary,
+                                    ),
+                                  ),
+                                  TextButton.icon(
+                                    iconAlignment: IconAlignment.end,
+                                    onPressed: () {},
+                                    label: Text(
+                                      "Recently Added",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium,
+                                    ),
+                                    icon: Icon(
+                                      Icons.list,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSecondary,
+                                    ),
+                                  )
+                                ],
+                              ),
+                              RecentsList(items),
+                            ],
+                          ),
                         )
                       ],
                     ),
@@ -203,8 +250,12 @@ class _HomeWidgetState extends State<HomeWidget> {
               child: Container(
                 height: MediaQuery.sizeOf(context).height * .95,
                 color: Theme.of(context).colorScheme.onPrimaryContainer,
-                child: const Column(
-                  children: [Expanded(child: RecentsGrid())],
+                child: Column(
+                  children: [
+                    SizedBox(
+                        height: MediaQuery.sizeOf(context).height * .3,
+                        child: RecentsGrid(items))
+                  ],
                 ),
               ),
             )
